@@ -1,0 +1,74 @@
+Server build for crypto node
+
+run an instance
+
+UPDATE/UPGRADE server
+sudo apt-get update
+sudo apt-get upgrade
+
+upload/download your preferred crypto coin source code .tar file
+
+INSTALL DEPENDENCIES
+sudo apt-get install build-essential
+
+INSTALL BerkeleyDB source package
+wget http://download.oracle.com/berkeley-db/db-4.8.30.NC.tar.gz
+
+UNPACK AND COMPILE the BerkeleyDB source
+tar -xvf db-4.8.30.NC.tar.gz
+cd db-4.8.30.NC/build_unix
+mkdir -p build
+BDB_PREFIX=$(pwd)/build
+../dist/configure --disable-shared --enable-cxx --with-pic --prefix=$BDB_PREFIX
+make install
+cd ../..
+
+INSTALL REMAINING DEPENDENCIES
+sudo apt-get install autoconf libboost-all-dev libssl-dev libprotobuf-dev protobuf-compiler libqt4-dev libqrencode-dev libtool
+sudo apt-get install libevent-dev
+sudo apt-get install pkg-config
+sudo apt install policycoreutils
+sudo apt install nmap
+
+INSTALL WEB SERVICE (EDIT PERMISSIONS IF REQUIRED USER ubuntu)
+sudo apt-get install lamp-server^
+sudo chgrp ubuntu /var/www
+sudo chmod 775 /var/www
+sudo chown -R ubuntu /var/www/*
+
+UNPACK and COMPILE CRYPTO COIN SOURCE
+tar -xvf file.tar (file.tar is the file name of crypto coin source)
+ls - list items in directory where you just unpacked the crypto coin source
+cd nameofcoinfolder
+./autogen.sh
+./configure CPPFLAGS="-I${BDB_PREFIX}/include/ -O2" LDFLAGS="-L${BDB_PREFIX}/lib/" --with-gui
+make
+
+
+RUN CRYPTO COIN daemon SERVER
+./nameofcoind -daemon (Starts Crypto Coin Server - be sure to be in nameofcoin/src folder)
+
+Your coin is now running a server instance
+
+create nameofcoin.conf file in .nameofcoin folder (wherever the data folder/files are)
+sudo nano nameofcoin.conf
+
+server=1
+rpcuser=user
+rpcpassword=password
+rpcport=8332
+gen=1
+
+exit - save - save
+
+cd nameofcoin/src (enters folder with nameofcoind server)
+
+watch ./nameofcoin-cli getblockchaininfo (To watch the coin download the blockchain)
+
+
+
+
+
+
+
+
